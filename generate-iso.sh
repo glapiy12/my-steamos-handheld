@@ -13,7 +13,6 @@ docker save "${IMAGE}" -o /tmp/my-image.tar
 echo "==> Creating ISO with bootc-image-builder"
 mkdir -p output
 
-# Запускаем bootc-image-builder, передавая tar через файл
 docker run \
   --rm \
   --privileged \
@@ -21,9 +20,8 @@ docker run \
   -v /tmp/my-image.tar:/tmp/my-image.tar:ro \
   quay.io/centos-bootc/bootc-image-builder:latest \
   --type iso \
-  --local-oci-archive /tmp/my-image.tar
+  --source oci-archive:/tmp/my-image.tar
 
-# Ищем готовый ISO
 ISO_PATH=$(find output -name '*.iso' | head -1)
 if [ -z "$ISO_PATH" ]; then
   echo "Error: ISO not found" >&2
