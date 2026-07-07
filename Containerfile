@@ -1,11 +1,9 @@
 FROM quay.io/fedora/fedora-kinoite:44
 
-# Добавляем репозитории
 RUN curl -o /etc/yum.repos.d/rpmfusion-free.repo https://download1.rpmfusion.org/free/fedora/rpmfusion-free.repo && \
     curl -o /etc/yum.repos.d/rpmfusion-nonfree.repo https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree.repo && \
     curl -o /etc/yum.repos.d/bieszczaders-kernel-cachyos.repo https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos/repo/fedora-44/bieszczaders-kernel-cachyos-fedora-44.repo
 
-# Устанавливаем игровой софт, кодеки, драйверы и ядро CachyOS
 RUN dnf install -y \
     steam \
     gamescope \
@@ -35,7 +33,6 @@ RUN dnf install -y \
     kernel-cachyos-modules-extra && \
     dnf clean all
 
-# Копируем и запускаем скрипты настройки
 COPY install-handygccs.sh /tmp/install-handygccs.sh
 RUN bash /tmp/install-handygccs.sh
 
