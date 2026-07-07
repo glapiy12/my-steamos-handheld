@@ -4,21 +4,20 @@ set -euo pipefail
 IMAGE="${1:-ghcr.io/glapiy12/my-steamos-handheld:latest}"
 OUTPUT="${2:-./my-steamos.iso}"
 
-echo "==> Pulling image ${IMAGE}"
-docker pull "${IMAGE}"
+echo "==> Pulling image with Podman"
+sudo podman pull "${IMAGE}"
 
-echo "==> Creating ISO with bootc-image-builder v0.1.0"
+echo "==> Creating ISO with bootc-image-builder"
 mkdir -p output
 
-docker run \
+sudo podman run \
   --rm \
   --privileged \
-  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v /var/lib/containers:/var/lib/containers \
   -v "$(pwd)/output":/output \
-  quay.io/centos-bootc/bootc-image-builder:v0.1.0 \
+  quay.io/centos-bootc/bootc-image-builder:latest \
   --type iso \
-  --local \
-  "docker-daemon:${IMAGE}"
+  "${IMAGE}"
 
 ISO_PATH=$(find output -name '*.iso' | head -1)
 if [ -z "$ISO_PATH" ]; then
