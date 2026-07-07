@@ -28,24 +28,13 @@ jobs:
         env:
           BLUEBUILD_SKIP_KEY_MANAGEMENT: true
 
-      # Добавляем шаг генерации ISO из собранного образа
-      - name: Generate ISO from container image
+      - name: Generate ISO
         run: |
-          # Устанавливаем podman (нужен для генерации ISO)
-          sudo apt-get update -y
-          sudo apt-get install -y podman
-
-          # Скачиваем скрипт генерации ISO из репозитория BlueBuild
-          curl -sSL -o generate-iso.sh https://raw.githubusercontent.com/blue-build/cli/main/generate-iso.sh
           chmod +x generate-iso.sh
-
-          # Запускаем генерацию ISO
-          # Образ уже лежит локально у Docker, но скрипт может тянуть из ghcr.io,
-          # поэтому просто укажем имя образа
-          sudo ./generate-iso.sh ghcr.io/glapiy12/my-steamos-handheld:latest ./output.iso
+          ./generate-iso.sh
 
       - name: Upload ISO artifact
         uses: actions/upload-artifact@v4
         with:
           name: my-steamos-handheld-iso
-          path: ./output.iso
+          path: ./my-steamos.iso
