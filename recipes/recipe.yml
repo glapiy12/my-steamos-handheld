@@ -1,9 +1,9 @@
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 name: my-steamos-handheld
 description: SteamOS-like system based on Fedora Kinoite with CachyOS kernel
-image-version: v1
+image-version: 44
 
-base-image: quay.io/fedora/fedora-kinoite:44
+base-image: quay.io/fedora/fedora-kinoite
 
 modules:
   - type: rpm-ostree
