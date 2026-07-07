@@ -1,0 +1,25 @@
+name: Build ISO
+on:
+  workflow_dispatch:
+
+jobs:
+  build-iso:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build ISO with BlueBuild
+        uses: blue-build/github-action@v1
+        with:
+          recipe: 'recipe.yml'
+          cli_version: 'v0.9.35'
+          build_opts: '--no-sign'
+          iso: true
+          registry_token: ${{ secrets.GITHUB_TOKEN }}
+          registry_username: ${{ github.repository_owner }}
+          registry: ghcr.io
