@@ -8,36 +8,7 @@ base-image: quay.io/fedora/fedora-kinoite
 modules:
   - type: script
     scripts:
-      - setup-repos.sh
-
-  - type: rpm-ostree
-    install:
-      - steam
-      - gamescope
-      - gamescope-session
-      - mangohud
-      - gamemode
-      - wine
-      - winetricks
-      - vulkan-tools
-      - mesa-vulkan-drivers.i686
-      - mesa-libGL.i686
-      - steam-devices
-      - ffmpeg-libs
-      - gstreamer1-plugins-{bad-*,good-*,base}
-      - gstreamer1-plugin-openh264
-      - lame
-      - libavcodec-freeworld
-      - vlc
-      - hwdata
-      - pciutils
-      - usbutils
-      - ryzenadj
-      - power-profiles-daemon
-      - kernel-cachyos
-      - kernel-cachyos-headers
-      - kernel-cachyos-modules
-      - kernel-cachyos-modules-extra
+      - install-packages.sh
 
   - type: script
     scripts:
