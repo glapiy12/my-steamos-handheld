@@ -7,25 +7,30 @@ OUTPUT="${2:-./my-steamos.iso}"
 echo "==> Pulling image with Podman"
 sudo podman pull "${IMAGE}"
 
-echo "==> Saving image to OCI archive"
-sudo podman save "${IMAGE}" --format oci-archive -o /tmp/image.tar
+echo "==> Installing bootc-image-builder"
+# Скачиваем последний статический бинарник
+curl -Lo bootc-image-builder https://github.com/osbuild/bootc-image-builder/releases/latest/download/bootc-image-builder-linux-amd64
+chmod +x bootc-image-builder
+sudo mv bootc-image-builder /usr/local/bin/
 
 echo "==> Creating ISO with bootc-image-builder"
 mkdir -p output
 
-sudo podman run \
-  --rm \
-  --privileged \
-  -v /tmp/image.tar:/tmp/image.tar:ro \
-  -v "$(pwd)/output":/output \
-  quay.io/centos-bootc/bootc-image-builder:latest \
+# Запускаем бинарник напрямую — он получит доступ к Podman-хранилищу хоста
+sudo bootc-image-builder \
   --type iso \
-  "oci-archive:/tmp/image.tar"
+  --local \
+  "${IMAGE}"
 
+# Ищем ISO в output (по умолчанию кладёт в bootiso/install.iso)
 ISO_PATH=$(find output -name '*.iso' | head -1)
 if [ -z "$ISO_PATH" ]; then
-  echo "Error: ISO not found" >&2
-  exit 1
+  # если не нашли, ищем в стандартном месте
+  ISO_PATH=$(find /var/lib/containers/storage -name '*.iso' 2>/dev/null | head -1) || true
+  if [ -z "$ISO_PATH" ]; then
+    echo "Error: ISO not found" >&2
+    exit 1
+  fi
 fi
 
 mv "$ISO_PATH" "$OUTPUT"
