@@ -13,19 +13,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # На всякий случай удаляем устаревшую папку config
       - name: Cleanup deprecated config dir
         run: rm -rf config || true
 
       - name: Build ISO with BlueBuild
         uses: blue-build/github-action@v1
         with:
-          recipe: 'recipes/recipe.yml'
-          cli_version: 'latest'          # ← используем последнюю версию
+          recipe: 'recipe.yml'                # ← только имя файла, без пути
+          cli_version: 'latest'
           build_opts: '--no-sign'
           iso: true
           registry_token: ${{ secrets.GITHUB_TOKEN }}
           registry_username: ${{ github.repository_owner }}
           registry: ghcr.io
         env:
-          BLUEBUILD_SKIP_KEY_MANAGEMENT: true   # ← отключаем авто-ключи
+          BLUEBUILD_SKIP_KEY_MANAGEMENT: true
