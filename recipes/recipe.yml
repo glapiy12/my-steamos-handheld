@@ -6,10 +6,14 @@ image-version: 44
 base-image: quay.io/fedora/fedora-kinoite
 
 modules:
+  - type: rpmfusion
+    free: true
+    nonfree: true
+
+  - type: copr
+    copr: bieszczaders/kernel-cachyos
+
   - type: rpm-ostree
-    repos:
-      - https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm
-      - https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-44.noarch.rpm
     install:
       - steam
       - gamescope
@@ -33,19 +37,14 @@ modules:
       - usbutils
       - ryzenadj
       - power-profiles-daemon
-
-  - type: script
-    scripts:
-      - install-handygccs.sh
-
-  - type: rpm-ostree
-    repos:
-      - https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos/repo/fedora-44/bieszczaders-kernel-cachyos-fedora-44.repo
-    install:
       - kernel-cachyos
       - kernel-cachyos-headers
       - kernel-cachyos-modules
       - kernel-cachyos-modules-extra
+
+  - type: script
+    scripts:
+      - install-handygccs.sh
 
   - type: script
     scripts:
