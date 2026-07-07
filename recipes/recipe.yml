@@ -1,1 +1,47 @@
+name: my-steamos-handheld
+description: SteamOS-like system based on Fedora Kinoite with CachyOS kernel
+base-image: quay.io/fedora/fedora-kinoite:44
 
+modules:
+  - type: rpm-ostree
+    repos:
+      - https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm
+      - https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-44.noarch.rpm
+    install:
+      - steam
+      - gamescope
+      - gamescope-session
+      - mangohud
+      - gamemode
+      - wine
+      - winetricks
+      - vulkan-tools
+      - mesa-vulkan-drivers.i686
+      - mesa-libGL.i686
+      - steam-devices
+      - ffmpeg-libs
+      - gstreamer1-plugins-{bad-*,good-*,base}
+      - gstreamer1-plugin-openh264
+      - lame
+      - libavcodec-freeworld
+      - vlc
+      - hwdata
+      - pciutils
+      - usbutils
+      - ryzenadj
+      - power-profiles-daemon
+
+  - type: script
+    script: install-handygccs.sh
+
+  - type: rpm-ostree
+    repos:
+      - https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos/repo/fedora-44/bieszczaders-kernel-cachyos-fedora-44.repo
+    install:
+      - kernel-cachyos
+      - kernel-cachyos-headers
+      - kernel-cachyos-modules
+      - kernel-cachyos-modules-extra
+
+  - type: script
+    script: setup-steamos-session.sh
